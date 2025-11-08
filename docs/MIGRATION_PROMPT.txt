@@ -1,0 +1,78 @@
+# 🚀 RAZORPAY MIGRATION PROMPT
+## Copy and paste this EXACT prompt when you're ready to migrate
+
+---
+
+PROMPT TO GIVE:
+
+I'm ready to migrate from WhatsApp orders to Razorpay payment gateway.
+
+Please read the complete guide at: docs/RAZORPAY_MIGRATION_GUIDE.md
+
+Then perform the following migration:
+
+1. RESTORE src/components/ShippingInfo.tsx
+   - Add back GraphQL imports (useQuery, gql)
+   - Add back GET_SHIPPING_SETTINGS query
+   - Add back dynamic shipping rendering
+   - Remove all static WhatsApp shipping info
+
+2. RESTORE src/pages/Checkout.tsx
+   - Add GraphQL imports (useMutation, useQuery, gql, CREATE_ORDER)
+   - Add GET_SHIPPING_SETTINGS query
+   - Add state variables (createOrder, shippingData)
+   - Replace handleSubmit function with Razorpay version
+   - Replace static shipping calculation with dynamic WordPress calculation
+   - Replace WhatsApp UI with Razorpay UI
+   - Replace green WhatsApp button with normal Razorpay button
+   - Remove all WhatsApp message generation code
+   - Remove window.open(whatsappUrl) code
+
+3. RESTORE src/pages/ProductDetail.tsx
+   - Uncomment the notification line (line ~195)
+   - Remove the comment about WhatsApp
+
+4. CREATE src/types/razorpay.d.ts
+   - Add Razorpay TypeScript types
+
+5. UPDATE .env.local
+   - Add VITE_RAZORPAY_KEY_ID placeholder
+   - Add VITE_RAZORPAY_KEY_SECRET placeholder
+
+6. After all changes, run npm run build to verify
+
+Please follow the exact code in RAZORPAY_MIGRATION_GUIDE.md for all replacements.
+
+Delete ALL WhatsApp-related code (message generation, window.open, green UI, etc.)
+
+Restore ALL GraphQL queries and mutations that were removed.
+
+Make sure the code is production-ready with no errors.
+
+---
+
+IMPORTANT NOTES FOR THE MIGRATION:
+
+- Use EXACT code from RAZORPAY_MIGRATION_GUIDE.md
+- Don't skip any steps
+- Remove ALL WhatsApp code completely
+- Restore ALL GraphQL functionality
+- Test build after completion
+- Verify no TypeScript errors
+
+---
+
+AFTER MIGRATION, I NEED TO:
+
+1. Get Razorpay API keys from https://razorpay.com
+2. Add keys to .env.local
+3. Add Razorpay script to public/index.html
+4. Install WordPress Razorpay plugin
+5. Configure Razorpay in WooCommerce settings
+6. Test in sandbox mode
+7. Deploy to production
+
+---
+
+END OF PROMPT
+

@@ -2,6 +2,7 @@ import { ShoppingCart, X, Plus, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/utils/formatCurrency";
 import {
   Sheet,
   SheetContent,
@@ -109,7 +110,7 @@ const Cart = () => {
               <div className="flex items-center justify-between mb-4">
                 <span className="text-lg font-medium text-foreground">Total</span>
                 <span className="text-2xl font-bold text-foreground">
-                  ₹{totalPrice.toFixed(2)}
+                  {formatCurrency(totalPrice)}
                 </span>
               </div>
               <Button className="w-full" size="lg" onClick={handleCheckout}>

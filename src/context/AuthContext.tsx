@@ -124,6 +124,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
+    
+    // Clear all localStorage to fix session issues
+    // This fixes GraphQL errors after WhatsApp purchases
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Clear Apollo cache if available
+    if (window.location.pathname !== '/') {
+      window.location.href = '/';
+    }
   };
 
   return (

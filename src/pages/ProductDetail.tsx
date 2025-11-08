@@ -191,7 +191,8 @@ const ProductDetail = () => {
       };
       
       addToCart(cartItem);
-      notify.success(notify.messages.addedToCart(product.name));
+      // Don't show notification when cart auto-opens - user can see the item in cart
+      // notify.success(notify.messages.addedToCart(product.name));
       openCart(); // Auto-open cart after adding item
     } catch (error) {
       logError('Add to Cart Failed', error);

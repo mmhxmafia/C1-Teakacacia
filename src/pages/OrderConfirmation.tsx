@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, Package, Mail, Phone, MapPin } from "lucide-react";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface OrderData {
   orderNumber: string;
@@ -50,6 +51,27 @@ const OrderConfirmation = () => {
     }
   }, [orderData, navigate]);
 
+  // Auto-clear cache after WhatsApp purchase to prevent GraphQL errors
+  useEffect(() => {
+    // Clear Apollo cache and session data when leaving this page
+    const handleBeforeUnload = () => {
+      // Clear cache to prevent GraphQL errors after WhatsApp purchase
+      localStorage.removeItem('apollo-cache-persist');
+      sessionStorage.clear();
+    };
+
+    // Add event listener
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup on component unmount (when user navigates away)
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      // Clear cache when navigating away from order confirmation
+      localStorage.removeItem('apollo-cache-persist');
+      sessionStorage.clear();
+    };
+  }, []);
+
   if (!orderData) {
     return null;
   }
@@ -58,7 +80,9 @@ const OrderConfirmation = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
+      <div className="print:hidden">
+        <Navigation />
+      </div>
       
       <main className="py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
@@ -182,27 +206,27 @@ const OrderConfirmation = () => {
             <CardContent className="space-y-3">
               <div className="flex justify-between text-foreground">
                 <span>Subtotal</span>
-                <span>₹{pricing.subtotal.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(pricing.subtotal)}</span>
               </div>
               <div className="flex justify-between text-foreground">
                 <span>Shipping</span>
-                <span>
+                <span className="font-medium">
                   {pricing.shipping === 0 ? (
                     <span className="text-green-600">Free</span>
                   ) : (
-                    `₹${pricing.shipping.toFixed(2)}`
+                    formatCurrency(pricing.shipping)
                   )}
                 </span>
               </div>
               <div className="flex justify-between text-foreground">
                 <span>Tax</span>
-                <span>₹{pricing.tax.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(pricing.tax)}</span>
               </div>
               <Separator />
               <div className="flex justify-between items-center">
-                <span className="text-lg font-medium text-foreground">Total</span>
-                <span className="text-2xl heading-font font-medium text-primary">
-                  ₹{pricing.total.toFixed(2)}
+                <span className="text-lg font-semibold text-foreground">Total</span>
+                <span className="text-2xl font-semibold text-primary">
+                  {formatCurrency(pricing.total)}
                 </span>
               </div>
             </CardContent>
@@ -251,7 +275,7 @@ const OrderConfirmation = () => {
           </Card>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center print:hidden">
             <Button size="lg" onClick={() => navigate('/')}>
               Continue Shopping
             </Button>
@@ -262,7 +286,9 @@ const OrderConfirmation = () => {
         </div>
       </main>
 
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -90,8 +90,9 @@ const Navigation = () => {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="hidden sm:flex">
-                    <User className="h-5 w-5" />
+                  <Button variant="outline" className="hidden sm:flex gap-2">
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
@@ -163,6 +164,57 @@ const Navigation = () => {
                 <Search className="h-5 w-5 mr-2" />
                 Search
               </Button>
+              
+              {/* Mobile User Menu */}
+              {isAuthenticated ? (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start sm:hidden"
+                    onClick={() => {
+                      navigate('/account');
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <User className="h-5 w-5 mr-2" />
+                    My Account
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start sm:hidden"
+                    onClick={() => {
+                      navigate('/orders');
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <User className="h-5 w-5 mr-2" />
+                    Order History
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="justify-start sm:hidden"
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  className="justify-start sm:hidden"
+                  onClick={() => {
+                    navigate('/login');
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  <User className="h-5 w-5 mr-2" />
+                  Login
+                </Button>
+              )}
             </div>
           </div>
         )}

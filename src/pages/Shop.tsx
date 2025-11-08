@@ -61,7 +61,10 @@ const GET_ALL_PRODUCTS = gql`
 `;
 
 const Shop = () => {
-  const { loading, error, data } = useQuery(GET_ALL_PRODUCTS);
+  const { loading, error, data, refetch } = useQuery(GET_ALL_PRODUCTS, {
+    fetchPolicy: 'network-only', // Always fetch fresh data, ignore cache
+    errorPolicy: 'all', // Return partial data even if there's an error
+  });
   const allProducts = data?.products?.nodes || [];
   const categories = (data?.productCategories?.nodes || []).filter((cat: any) => 
     cat.name.toLowerCase() !== 'uncategorized'
@@ -183,8 +186,23 @@ const Shop = () => {
           {error && (
             <div className="text-center py-12">
               <p className="text-destructive text-lg mb-4">Failed to load products</p>
-              <p className="text-muted-foreground mb-6">{error.message}</p>
-              <Button onClick={() => window.location.reload()}>Try Again</Button>
+              <p className="text-muted-foreground mb-4">{error.message}</p>
+              <div className="flex gap-4 justify-center">
+                <Button onClick={() => refetch()}>Retry</Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.reload();
+                  }}
+                >
+                  Clear Cache & Retry
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4">
+                If the issue persists, try signing out and back in.
+              </p>
             </div>
           )}
           
