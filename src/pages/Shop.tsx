@@ -97,7 +97,9 @@ const Shop = () => {
     // Price range filter
     if (priceRange !== 'all') {
       filtered = filtered.filter(product => {
-        const price = parseFloat(product.price || product.regularPrice || '0');
+        const priceStr = (product.price || product.regularPrice || '').replace(/[^\d.]/g, '');
+        const price = parseFloat(priceStr);
+        if (isNaN(price)) return true;
         switch(priceRange) {
           case 'under-20000': return price < 20000;
           case '20000-40000': return price >= 20000 && price < 40000;
@@ -112,15 +114,25 @@ const Shop = () => {
     switch(sortBy) {
       case 'price-low':
         filtered.sort((a, b) => {
-          const priceA = parseFloat(a.price || a.regularPrice || '0');
-          const priceB = parseFloat(b.price || b.regularPrice || '0');
+          const priceStrA = (a.price || a.regularPrice || '').replace(/[^\d.]/g, '');
+          const priceStrB = (b.price || b.regularPrice || '').replace(/[^\d.]/g, '');
+          const priceA = parseFloat(priceStrA);
+          const priceB = parseFloat(priceStrB);
+          if (isNaN(priceA) && isNaN(priceB)) return 0;
+          if (isNaN(priceA)) return 1;
+          if (isNaN(priceB)) return -1;
           return priceA - priceB;
         });
         break;
       case 'price-high':
         filtered.sort((a, b) => {
-          const priceA = parseFloat(a.price || a.regularPrice || '0');
-          const priceB = parseFloat(b.price || b.regularPrice || '0');
+          const priceStrA = (a.price || a.regularPrice || '').replace(/[^\d.]/g, '');
+          const priceStrB = (b.price || b.regularPrice || '').replace(/[^\d.]/g, '');
+          const priceA = parseFloat(priceStrA);
+          const priceB = parseFloat(priceStrB);
+          if (isNaN(priceA) && isNaN(priceB)) return 0;
+          if (isNaN(priceA)) return 1;
+          if (isNaN(priceB)) return -1;
           return priceB - priceA;
         });
         break;
