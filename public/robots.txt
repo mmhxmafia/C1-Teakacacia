@@ -1,0 +1,19 @@
+# Teakacacia - Robots.txt
+# Allow search engines to index public pages
+# Disallow indexing of user account and checkout pages
+
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /account
+Disallow: /orders
+Disallow: /order-confirmation
+Disallow: /login
+Disallow: /register
+
+# Allow all bots to access products and homepage
+Allow: /products/
+Allow: /contact
+
+# Sitemap location (update with your actual domain when live)
+Sitemap: https://yourwebsite.com/sitemap_index.xml
